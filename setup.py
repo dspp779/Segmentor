@@ -22,5 +22,5 @@ setup(
     packages={'Segmentor'},
     package_dir={'Segmentor': 'Segmentor'},
     package_data={'Segmentor': ['Data/*']},
-    scripts=['scripts/naer_seg']
+    scripts=[]
 )
