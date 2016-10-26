@@ -1,18 +1,11 @@
-from Struct import *
-from Tokenizer import *
-from Segmentor import *
-from POSTagger import *
-from DocSegmentor import *
-from FileSegmentor import *
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from .Tokenizer import Tokenizer
+from .Segmentor import Segmentor
+from .POSTagger import POSTagger
 
-__all__=[
-	"Tokenizer",
-	"Segmentor",
-	"POSTagger",
-    "DocSegmentor",
-    "DocPOSTagger",
-    "FileSegmentor",
-    "FilePOSTagger",
+__all__ = [
+    'Tokenizer',
+    'Segmentor',
+    'POSTagger'
 ]
-
-
