@@ -16,7 +16,7 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+from __future__ import print_function, unicode_literals
 from Segmentor import Segmentor
 
 print('Loading NAER Segmentor ... ',)
@@ -31,7 +31,7 @@ def getSegResult(RawText):
 
 if __name__ == "__main__":
     segmentor = Segmentor()
-    RawText = u'''
+    RawText = '''
 市面上很少有「教科書設計」的專書，因為我們總覺得那是出版社的事！
 然而，真的是這樣嗎？
 

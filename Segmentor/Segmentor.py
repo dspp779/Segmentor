@@ -20,7 +20,7 @@
 # ==========================================
 # use crf POS tagger
 # ==========================================
-
+from __future__ import print_function, unicode_literals
 from os import path
 import re
 import json
@@ -47,11 +47,7 @@ class Segmentor(object):
     __other = '[^\w\u4E00-\u9fa5\s]'
 
     ##
-    _to_tokens_pattern = (
-        __ch +
-        u"|" + __eng + __eng_sym + u"*" +
-        u"|" + __other
-    )
+    _to_tokens_pattern = '{0}|{1}{2}*|{3}'.format(__ch, __eng, __eng_sym, __other)
 
     def __init__(self, model_dir=__default_model_dir__):
         MIDic = path.join(model_dir, 'DefaultMI.pickle')
@@ -107,7 +103,7 @@ class Segmentor(object):
             # ===========  Character Type =============
             # 標上字的類別
             # 如果是中文字就直接輸出
-            if token_features[i][0] >= u'\u4e00' and token_features[i][0] <= u'\u9fff':
+            if token_features[i][0] >= '\u4e00' and token_features[i][0] <= '\u9fff':
                 token_features[i][1][0] = "CH"
             elif len(token_features[i][0]) == 1 and len(token_features[i][0]) > 1:  # 全形符號
                 token_features[i][1][0] = "PUNC"
@@ -119,11 +115,9 @@ class Segmentor(object):
             # ===========  MI  =============
             # 標上MI的等級
             if i == 0:
-                token_features[i][1][1] = self.__getMIfeature(
-                    ("", token_features[i][0]))
+                token_features[i][1][1] = self.__getMIfeature(("", token_features[i][0]))
             else:
-                token_features[i][1][1] = self.__getMIfeature(
-                    (token_features[i - 1][0], token_features[i][0]))
+                token_features[i][1][1] = self.__getMIfeature((token_features[i - 1][0], token_features[i][0]))
 
             # ===========  二字構詞規則  =============
             # 疊字規則: 2 字, AA
@@ -143,9 +137,8 @@ class Segmentor(object):
                 Check_Result = False
                 if token_features[i][1][3] == "NULL":  # 還沒有判斷過 或是有map到之前的規則
                     # 三疊字 AAA
-                    if token_features[i][0] == token_features[i + 1][0] and \
+                    if token_features[i][0] == token_features[i + 1][0] and  \
                        token_features[i][0] == token_features[i + 2][0]:  # 符合AAA規則
-
                         Check_Result = True
 
                     else:  # 也沒有符合AAA規則 檢查ABB
@@ -287,8 +280,7 @@ class Segmentor(object):
                 model_name: the name of the generated model ('e.g., /model/Model_1')
         '''
         print("start training", time.ctime())
-        subprocess.check_output(
-            ["crf_learn", "-f", "3", template_file, training_file, model_name])
+        subprocess.check_output(["crf_learn", "-f", "3", template_file, training_file, model_name])
         print("training completed", time.ctime())
         return True
 
@@ -351,7 +343,7 @@ class Segmentor(object):
                 temp_word = now_char
             elif BI == "I" or BI == "E":
 
-                if re.match(u'[a-zA-Z0-9_][a-zA-Z0-9_\\/,.&\-]*$', now_char):
+                if re.match('[a-zA-Z0-9_][a-zA-Z0-9_\\/,.&\-]*$', now_char):
                     temp_word += " " + now_char  # (英文及符號之後須考慮多加空白)
                 else:
                     temp_word += now_char
@@ -372,10 +364,10 @@ class Segmentor(object):
 if __name__ == "__main__":
     a = Segmentor()
     doc = (
-        u"<strong>思想引發行動</strong>(Sow a thought and you reap an act.)，\n"
-        u"[xxx]行動漸成習慣</xxx>(Sow an act and you reap a habit)，\n"
-        u"習慣塑造品格(Sow a habit and you reap a character.)，\n"
-        u"品格決定命運(Sow a character and you reap a destiny.)。\n"
+        "<strong>思想引發行動</strong>(Sow a thought and you reap an act.)，\n"
+        "[xxx]行動漸成習慣</xxx>(Sow an act and you reap a habit)，\n"
+        "習慣塑造品格(Sow a habit and you reap a character.)，\n"
+        "品格決定命運(Sow a character and you reap a destiny.)。\n"
     )
     sents = doc.splitlines()
     print(json.dumps(sents, ensure_ascii=False))

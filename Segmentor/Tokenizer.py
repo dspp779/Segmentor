@@ -21,7 +21,7 @@
 # ==========================================
 # use crf POS tagger
 # ==========================================
-
+from __future__ import print_function, unicode_literals
 import re
 import json
 
@@ -32,23 +32,19 @@ class Tokenizer:
     __to_sents_rule = re.compile("([^\n]+)[\n]*")
 
     # 中文字元
-    __ch = u"[\u4E00-\u9fa5]"
+    __ch = "[\u4E00-\u9fa5]"
 
     # 英文字元
-    __eng = u"[a-zA-Z0-9_ａ-ｚＡ-Ｚ０-９－＿]"
+    __eng = "[a-zA-Z0-9_ａ-ｚＡ-Ｚ０-９－＿]"
 
     # 英文字元+符號
-    __eng_sym = u"[a-zA-Z0-9_ａ-ｚＡ-Ｚ０-９－＿\\/,.&\-]"
+    __eng_sym = "[a-zA-Z0-9_ａ-ｚＡ-Ｚ０-９－＿\\/,.&\-]"
 
     # 其他字元
-    __other = u"[^\w\u4E00-\u9fa5\s]"
+    __other = "[^\w\u4E00-\u9fa5\s]"
 
     # regular expression for tokenize to words
-    __to_tokens_rule = re.compile(
-        __ch +
-        u"|" + __eng + __eng_sym + u"*" +
-        u"|" + __other
-    )
+    __to_tokens_rule = re.compile('{0}|{1}{2}*|{3}'.format(__ch, __eng, __eng_sym, __other))
 
     @staticmethod
     def ToSents(doc):
@@ -65,14 +61,14 @@ class Tokenizer:
         return tokens
 
 if __name__ == '__main__':
-    a = u"asdadsfa\nadsfasdf\n\nasdfasdf\r\n"
+    a = "asdadsfa\nadsfasdf\n\nasdfasdf\r\n"
     L = Tokenizer.ToSents(a)
     print(L)
-    Tokenizer.splitRule = re.compile(u'[^ ]*[ ]')
-    a = u"asdadsfa adsfasdf\nasdfasdf "
+    Tokenizer.splitRule = re.compile('[^ ]*[ ]')
+    a = "asdadsfa adsfasdf\nasdfasdf "
     L = Tokenizer.ToSents(a)
     print(L)
-    a = u"這是中文 asdadsfa adsf中文asdf 這是中文 國家教 育研 究院\n研究國\n家教育asdfasdf "
+    a = "這是中文 asdadsfa adsf中文asdf 這是中文 國家教 育研 究院\n研究國\n家教育asdfasdf "
     print(a)
     L = Tokenizer.ToTokens(a)
     print(json.dumps(L, ensure_ascii=False))
